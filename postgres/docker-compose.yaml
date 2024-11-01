@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres
+    container_name: social-network-postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - social-network-data:/var/lib/postgresql/data/data
+      - ./init:/docker-entrypoint-initdb.d/
+    environment:
+      POSTGRES_USER: ${SOCIAL_NETWORK_DB_USERNAME}
+      POSTGRES_PASSWORD: ${SOCIAL_NETWORK_DB_PASSWORD}
+      POSTGRES_DB: ${SOCIAL_NETWORK_DB_NAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    networks:
+      - social-network
+    env_file:
+      - .env
+
+volumes:
+  social-network-data:
+
+networks:
+  social-network:
+    driver: bridge
