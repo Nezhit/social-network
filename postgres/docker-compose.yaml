@@ -1,12 +1,12 @@
 version: "3.9"
 services:
-  postgres:
+  social-network-postgres:
     image: postgres
     container_name: social-network-postgres
     ports:
       - '5432:5432'
     volumes:
-      - social-network-data:/var/lib/postgresql/data/data
+      - social-data:/var/lib/postgresql/data/data
       - ./init:/docker-entrypoint-initdb.d/
     environment:
       POSTGRES_USER: ${SOCIAL_NETWORK_DB_USERNAME}
@@ -20,7 +20,7 @@ services:
       - .env
 
 volumes:
-  social-network-data:
+  social-data:
 
 networks:
   social-network:

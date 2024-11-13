@@ -4,7 +4,7 @@ databaseChangeLog:
       author: "Vlad"
       changes:
         - sqlFile:
-            path: "changeset/1-create-user-table.sql"
+            path: "changeset/1-init-application.sql"
             relativeToChangelogFile: true
 
   - changeSet:
@@ -12,42 +12,5 @@ databaseChangeLog:
       author: "Vlad"
       changes:
         - sqlFile:
-            path: "changeset/2-create-pictures-table.sql"
+            path: "changeset/2-create-tables.sql"
             relativeToChangelogFile: true
-
-  - changeSet:
-      id: 3
-      author: "Vlad"
-      changes:
-        - sqlFile:
-            path: "changeset/3-create-posts-table.sql"
-            relativeToChangelogFile: true
-
-  - changeSet:
-      id: 4
-      author: "Vlad"
-      changes:
-        - sqlFile:
-            path: "changeset/4-create-comments-table.sql"
-            relativeToChangelogFile: true
-
-  - changeSet:
-      id: 5
-      author: "Vlad"
-      changes:
-        - sqlFile:
-            path: "changeset/5-create-post-picture-table.sql"
-            relativeToChangelogFile: true
-
-  - changeSet:
-      id: 6
-      author: "Vlad"
-      changes:
-        - sqlFile:
-            path: "changeset/6-add-foreign-keys.sql"
-            relativeToChangelogFile: true
-#database:
-#  driver: org.postgresql.Driver
-#  url: jdbc:postgresql://localhost:5432/social_network
-#  username: postgres
-#  password: root
