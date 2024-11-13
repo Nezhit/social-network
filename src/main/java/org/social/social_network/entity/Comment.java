@@ -10,23 +10,29 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.UUID;
 
-@Entity
-@Table(name = "pictures")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "comments")
 public class Comment {
+
     @Id
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    private String text;
+
+    private Instant published;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id", insertable = false, updatable = false)
     private User author;
+
+    @ManyToOne
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    private Post post;
 }
