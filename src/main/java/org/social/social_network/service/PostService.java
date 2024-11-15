@@ -11,8 +11,8 @@ public interface PostService {
     List<Post> findAll();
 
     List<Post> findAll(User user);
-    Map<Post,List<Comment>> findCommentsForEachPost();
-    Map<User,List<Post>> findFirstFivePostsForEachCommentator();
+//    Map<Post,List<Comment>> findCommentsForEachPost();
+//    Map<User,List<Post>> findFirstFivePostsForEachCommentator();
 
     List<Post> findRecommendations(User user);
 }

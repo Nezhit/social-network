@@ -33,31 +33,35 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findAll(User user) {
-        return postRepository.findByAuthor(user);
+        return postRepository.findAll(user);
     }
 
-    @Override
-    public Map<Post, List<Comment>> findCommentsForEachPost() {
-        return commentRepository.findAll()
-                .stream()
-                .collect(Collectors.groupingBy(Comment::getPost));
-    }
-
-    @Override
-    public Map<User, List<Post>> findFirstFivePostsForEachCommentator() {
-        return commentRepository.findAll()
-                .stream()
-                .collect(Collectors.groupingBy(
-                        Comment::getAuthor,
-                        Collectors.collectingAndThen(
-                                Collectors.mapping(Comment::getPost, Collectors.toList()),
-                                list -> list.stream().limit(5).collect(Collectors.toList())
-                        )
-                ));
-    }
+//    @Override
+//    public Map<Post, List<Comment>> findCommentsForEachPost() {
+//        return commentRepository.findAll()
+//                .stream()
+//                .collect(Collectors.groupingBy(Comment::getPost));
+//    }
+//
+//    @Override
+//    public Map<User, List<Post>> findFirstFivePostsForEachCommentator() {
+//        return commentRepository.findAll()
+//                .stream()
+//                .collect(Collectors.groupingBy(
+//                        Comment::getAuthor,
+//                        Collectors.collectingAndThen(
+//                                Collectors.mapping(Comment::getPost, Collectors.toList()),
+//                                list -> list.stream().limit(5).collect(Collectors.toList())
+//                        )
+//                ));
+//    }
 
     @Override
     public List<Post> findRecommendations(User user) {
-        return postRepository.findAll();
+        return postRepository.findAll(user).stream()
+                .flatMap(post -> post.getComments().stream())
+                .map(Comment::getAuthor)
+                .flatMap(commentAuthor -> findAll(commentAuthor).stream().limit(5))
+                .toList();
     }
 }
