@@ -2,16 +2,14 @@ spring:
   application:
     name: social_network
   liquibase:
-    change-log: classpath:/db/changelog/db.changelog-master.yml
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
     enabled: true
-    default-schema: social-network
+    default-schema: social
   jpa:
     hibernate:
       ddl-auto: validate
-    open-in-view: false
-
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:5432/social-network?currentSchema=social-network"
-    username: admin
-    password: admin
+    url: "jdbc:postgresql://localhost:5432/social?currentSchema=social"
+    username: qwe123
+    password: qwe123
