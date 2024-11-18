@@ -44,4 +44,7 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
+    public void addComment(Comment comment){
+        this.comments.add(comment);
+    }
 }
