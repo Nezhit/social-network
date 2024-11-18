@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,8 +21,6 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
-
-    private final CommentRepository commentRepository;
 
 
     private final UserRepository userRepository;
@@ -32,36 +31,22 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findAll(User user) {
+    public List<Post> findAll(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         return postRepository.findAll(user);
     }
 
-//    @Override
-//    public Map<Post, List<Comment>> findCommentsForEachPost() {
-//        return commentRepository.findAll()
-//                .stream()
-//                .collect(Collectors.groupingBy(Comment::getPost));
-//    }
-//
-//    @Override
-//    public Map<User, List<Post>> findFirstFivePostsForEachCommentator() {
-//        return commentRepository.findAll()
-//                .stream()
-//                .collect(Collectors.groupingBy(
-//                        Comment::getAuthor,
-//                        Collectors.collectingAndThen(
-//                                Collectors.mapping(Comment::getPost, Collectors.toList()),
-//                                list -> list.stream().limit(5).collect(Collectors.toList())
-//                        )
-//                ));
-//    }
 
     @Override
-    public List<Post> findRecommendations(User user) {
+    public List<Post> findRecommendations(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
         return postRepository.findAll(user).stream()
                 .flatMap(post -> post.getComments().stream())
                 .map(Comment::getAuthor)
-                .flatMap(commentAuthor -> findAll(commentAuthor).stream().limit(5))
+                .flatMap(commentAuthor -> findAll(commentAuthor.getId())
+                        .stream()
+                        .limit(5))
                 .toList();
     }
 }

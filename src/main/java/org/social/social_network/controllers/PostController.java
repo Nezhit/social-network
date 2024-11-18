@@ -7,6 +7,7 @@ import org.social.social_network.entity.User;
 import org.social.social_network.repository.UserRepository;
 import org.social.social_network.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,14 +25,13 @@ public class PostController {
    private final UserRepository userRepository;
 
     @GetMapping("/all")
-    public List<Post> getAllPosts() {
-        return postService.findAll();
+    public ResponseEntity<List<Post>> getAllPosts() {
+        return ResponseEntity.ok(postService.findAll());
     }
 
     @GetMapping("/user/{userId}")
-    public List<Post> getAllPostsByUser(@PathVariable UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        return postService.findAll(user);
+    public ResponseEntity<List<Post>> getAllPostsByUser(@PathVariable UUID userId) {
+        return ResponseEntity.ok(postService.findAll(userId));
     }
 
 //    @GetMapping("/comments")
@@ -45,8 +45,7 @@ public class PostController {
 //    }
 
     @GetMapping("/recommendations/{userId}")
-    public List<Post> getRecommendations(@PathVariable UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        return postService.findRecommendations(user);
+    public ResponseEntity<List<Post>> getRecommendations(@PathVariable UUID userId) {
+        return ResponseEntity.ok(postService.findRecommendations(userId));
     }
 }
