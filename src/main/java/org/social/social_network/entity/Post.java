@@ -1,47 +1,38 @@
 package org.social.social_network.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.relational.core.mapping.MappedCollection;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
 @Table(name = "posts")
 public class Post {
 
     @Id
-    @GeneratedValue
     private UUID id;
+
+    private String description;
 
     private int likes;
 
-    private Instant pubDate;
+    @CreatedDate
+    private Instant pubDate = Instant.now();
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id")
-    private Picture pic;
+    @LastModifiedDate
+    private Instant modifiedDate = Instant.now();
 
-    @ManyToOne
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    private User author;
+    private UUID authorId;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<Comment> comments;
+    @MappedCollection(idColumn = "post_id")
+    private Picture picture;
+
+    @MappedCollection(idColumn = "post_id")
+    private Set<Comment> comments;
 }

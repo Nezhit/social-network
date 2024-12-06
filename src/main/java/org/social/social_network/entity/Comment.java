@@ -1,14 +1,13 @@
 package org.social.social_network.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -17,7 +16,6 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "comments")
 public class Comment {
 
@@ -26,13 +24,13 @@ public class Comment {
 
     private String text;
 
-    private Instant published;
+    @CreatedDate
+    private Instant pubDate = Instant.now();
 
-    @ManyToOne
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    private User author;
+    @LastModifiedDate
+    private Instant modifiedDate = Instant.now();
 
-    @ManyToOne
-    @JoinColumn(name = "id", insertable = false, updatable = false)
-    private Post post;
+    private UUID authorId;
+
+    private UUID postId;
 }
