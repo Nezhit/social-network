@@ -78,6 +78,41 @@ class PostControllerTest {
 
     @Test
     fun getAllPostsByUser() {
-        //TODO необходимо создать 3 поста у двух юзеров, в тесте дернуть того у кого 2 поста
+        //Given
+        val user1 = User().apply { name = "User1" }
+        val user2 = User().apply { name = "User2" }
+        userRepository.save(user1)
+        userRepository.save(user2)
+        val savedPostOne = postRepository.save(Post().stub(user1.id, "one"))
+        val savedPostTwo = postRepository.save(Post().stub(user1.id, "two"))
+        val savedPostThree = postRepository.save(Post().stub(user2.id, "three"))
+        val savedPostFour = postRepository.save(Post().stub(user2.id, "four"))
+
+        //When
+        val json = mockMvc.get("$POST_PATH/user/${user1.id}") {
+            characterEncoding = Charsets.UTF_8.name()
+            accept = MediaType.APPLICATION_JSON
+        }.andExpect {
+            status { isOk() }
+        }.andReturn().response.contentAsString
+
+        val result = objectMapper.readValue(json, object : TypeReference<List<Post>>() {})
+
+        //Then
+        assertThat(result)
+            .isNotNull
+            .hasSize(2)
+
+        assertThat(result)
+            .isNotNull
+            .filteredOn { it.id == savedPostOne.id }
+            .first()
+            .matches({ it.description == "one" }, "description")
+
+        assertThat(result)
+            .isNotNull
+            .filteredOn { it.id == savedPostTwo.id }
+            .first()
+            .matches({ it.description == "two" }, "description")
     }
 }
