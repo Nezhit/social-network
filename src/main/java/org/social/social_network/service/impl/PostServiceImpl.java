@@ -1,8 +1,8 @@
 package org.social.social_network.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.social.social_network.dto.PostRqDto;
-import org.social.social_network.dto.PostUpdateRqDto;
+import org.social.social_network.dto.PostRqModel;
+import org.social.social_network.dto.PostUpdateRqModel;
 import org.social.social_network.entity.Comment;
 import org.social.social_network.entity.Post;
 import org.social.social_network.repository.PostRepository;
@@ -45,16 +45,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void addPost(PostRqDto postRqDto) {
+    public void addPost(PostRqModel postRqModel) {
         Post newPost = new Post();
-        newPost.setAuthorId(postRqDto.authorId());
-        newPost.setDescription(postRqDto.description());
+        newPost.setAuthorId(postRqModel.authorId());
+        newPost.setDescription(postRqModel.description());
         postRepository.save(newPost);
     }
 
     @Override
     @Transactional
-    public Post updatePost(UUID id, PostUpdateRqDto rqDto) {
+    public Post updatePost(UUID id, PostUpdateRqModel rqDto) {
         final Post post = postRepository.findById(id)
                 .stream()
                 .findFirst()

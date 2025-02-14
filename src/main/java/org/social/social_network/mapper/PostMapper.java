@@ -1,22 +1,15 @@
 package org.social.social_network.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-import org.social.social_network.dto.PostRqDto;
-import org.social.social_network.dto.PostUpdateRqDto;
-import org.social.social_network.entity.Post;
+import org.social.model.PostRqDto;
+import org.social.model.PostUpdateRqDto;
+import org.social.social_network.dto.PostRqModel;
+import org.social.social_network.dto.PostUpdateRqModel;
 
 @Mapper(componentModel = "spring")
 public interface PostMapper {
 
-    @Mapping(source = "authorId", target = "authorId")
-    @Mapping(source = "description", target = "description")
-    Post postRqDtoToPost(PostRqDto postRqDto);
+    PostRqModel postRqDtoToPostModel(PostRqDto dto);
 
-    @Mapping(source = "likes", target = "likes")
-    @Mapping(source = "description", target = "description")
-    Post postUpdateRqDtoToPost(PostUpdateRqDto postUpdateRqDto);
-
-
+    PostUpdateRqModel postUpdateRqDtoToPostUpdateModel(PostUpdateRqDto dto);
 }

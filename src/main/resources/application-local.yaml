@@ -1,3 +1,8 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
 spring:
   application:
     name: social_network
@@ -6,7 +11,7 @@ spring:
     enabled: true
     default-schema: social
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: "jdbc:postgresql://localhost:5432/social?currentSchema=social"
+    driverClassName: org.postgresql.Driver
+    url: "jdbc:postgresql://localhost:5432/social"
     username: qwe123
     password: qwe123

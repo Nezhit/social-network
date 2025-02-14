@@ -3,31 +3,33 @@ info:
   title: API сервиса spring-boot-openapi-generation
   version: 1.0.1
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8080/api
 tags:
-  - name: SpringBootGenerationForPostEntity
-    description: Spring boot openapi generation service API
+  - name: Posts
+    description: Посты
 paths:
-  /api/post/all:
+  /post/all:
     get:
       tags:
-        - SpringBootGenerationForPostEntity
+        - Posts
       summary: Получить все посты
+      operationId: getAllPosts
       responses:
         '200':
-          description: Список всех постов
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
+                  $ref: '#/components/schemas/PostRsDto'
 
-  /api/post/user/{userId}:
+  /post/user/{userId}:
     get:
       tags:
-        - SpringBootGenerationForPostEntity
+        - Posts
       summary: Получить все посты по пользователю
+      operationId: getAllPostsByUser
       parameters:
         - name: userId
           in: path
@@ -44,13 +46,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
+                  $ref: '#/components/schemas/PostRsDto'
 
-  /api/post/recommendations/{userId}:
+  /post/recommendations/{userId}:
     get:
       tags:
-        - SpringBootGenerationForPostEntity
+        - Posts
       summary: Получить рекомендации для пользователя
+      operationId: getRecommendations
       parameters:
         - name: userId
           in: path
@@ -67,13 +70,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Post'
+                  $ref: '#/components/schemas/PostRsDto'
 
-  /api/post:
+  /post:
     post:
       tags:
-        - SpringBootGenerationForPostEntity
+        - Posts
       summary: Создать новый пост
+      operationId: addPost
       requestBody:
         required: true
         content:
@@ -84,11 +88,12 @@ paths:
         '201':
           description: Пост успешно создан
 
-  /api/post/{id}:
+  /post/{id}:
     put:
       tags:
-        - SpringBootGenerationForPostEntity
+        - Posts
       summary: Обновить пост
+      operationId: updatePost
       parameters:
         - name: id
           in: path
@@ -109,11 +114,11 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Post'
+                $ref: '#/components/schemas/PostRsDto'
 
 components:
   schemas:
-    Post:
+    PostRsDto:
       type: object
       properties:
         id:
@@ -127,17 +132,16 @@ components:
           type: string
           format: date-time
       description: Модель поста
-      x-java-package: org.social.social_network.model  # Указание правильного пакета для Post
 
     PostRqDto:
       type: object
       properties:
-        title:
+        authorId:
           type: string
-        content:
+          format: uuid
+        description:
           type: string
       description: DTO для создания нового поста
-      x-java-package: org.social.social_network.dto  # Указание правильного пакета для PostRqDto
 
     PostUpdateRqDto:
       type: object
@@ -147,4 +151,3 @@ components:
         content:
           type: string
       description: DTO для обновления поста
-      x-java-package: org.social.social_network.dto  # Указание правильного пакета для PostUpdateRqDto

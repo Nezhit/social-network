@@ -1,7 +1,7 @@
 package org.social.social_network.service;
 
-import org.social.social_network.dto.PostRqDto;
-import org.social.social_network.dto.PostUpdateRqDto;
+import org.social.social_network.dto.PostRqModel;
+import org.social.social_network.dto.PostUpdateRqModel;
 import org.social.social_network.entity.Post;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface PostService {
 
     List<Post> findRecommendations(UUID userId);
 
-    void addPost(PostRqDto postRqDto);
+    void addPost(PostRqModel postRqModel);
 
-    Post updatePost(UUID id, PostUpdateRqDto postUpdateRqDto);
+    Post updatePost(UUID id, PostUpdateRqModel postUpdateRqModel);
 }
