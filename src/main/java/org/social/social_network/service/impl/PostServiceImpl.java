@@ -5,7 +5,9 @@ import org.social.social_network.dto.PostRqModel;
 import org.social.social_network.dto.PostUpdateRqModel;
 import org.social.social_network.entity.Comment;
 import org.social.social_network.entity.Post;
+import org.social.social_network.model.CommentNotification;
 import org.social.social_network.repository.PostRepository;
+import org.social.social_network.service.NotificationService;
 import org.social.social_network.service.PostService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import java.util.UUID;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
