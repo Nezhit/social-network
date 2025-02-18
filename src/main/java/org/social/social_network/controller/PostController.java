@@ -1,54 +1,51 @@
 package org.social.social_network.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.social.social_network.dto.PostRqDto;
-import org.social.social_network.dto.PostUpdateRqDto;
-import org.social.social_network.entity.Post;
+import org.social.api.PostsApi;
+import org.social.model.PostRqDto;
+import org.social.model.PostRsDto;
+import org.social.model.PostUpdateRqDto;
+import org.social.social_network.dto.PostRqModel;
+import org.social.social_network.mapper.PostMapper;
 import org.social.social_network.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/post")
 @RequiredArgsConstructor
-public class PostController {
+public class PostController implements PostsApi {
 
     private final PostService postService;
+    private final PostMapper postMapper;
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Post>> getAllPosts() {
-        return ResponseEntity.ok(postService.findAll());
-    }
-
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Post>> getAllPostsByUser(@PathVariable UUID userId) {
-        return ResponseEntity.ok(postService.findAll(userId));
-    }
-
-    @GetMapping("/recommendations/{userId}")
-    public ResponseEntity<List<Post>> getRecommendations(@PathVariable UUID userId) {
-        return ResponseEntity.ok(postService.findRecommendations(userId));
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> addPost(@RequestBody PostRqDto postRqDto) {
-        postService.addPost(postRqDto);
+    @Override
+    public ResponseEntity<Void> addPost(PostRqDto postRqDto) {
+        PostRqModel model = postMapper.postRqDtoToPostModel(postRqDto);
+        postService.addPost(model);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Post> updatePost(@PathVariable("id") UUID id, @RequestBody PostUpdateRqDto postUpdateRqDto) {
-        Post post = postService.updatePost(id, postUpdateRqDto);
-        return ResponseEntity.ok(post);
+    @Override
+    public ResponseEntity<List<PostRsDto>> getAllPosts() {
+        return PostsApi.super.getAllPosts();
+    }
+
+    @Override
+    public ResponseEntity<List<PostRsDto>> getAllPostsByUser(UUID userId) {
+        return PostsApi.super.getAllPostsByUser(userId);
+    }
+
+    @Override
+    public ResponseEntity<List<PostRsDto>> getRecommendations(UUID userId) {
+        return PostsApi.super.getRecommendations(userId);
+    }
+
+    @Override
+    public ResponseEntity<PostRsDto> updatePost(UUID id, PostUpdateRqDto postUpdateRqDto) {
+        return PostsApi.super.updatePost(id, postUpdateRqDto);
     }
 }

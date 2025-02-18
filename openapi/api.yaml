@@ -1,0 +1,153 @@
+openapi: 3.0.3
+info:
+  title: API сервиса spring-boot-openapi-generation
+  version: 1.0.1
+servers:
+  - url: http://localhost:8080/api
+tags:
+  - name: Posts
+    description: Посты
+paths:
+  /post/all:
+    get:
+      tags:
+        - Posts
+      summary: Получить все посты
+      operationId: getAllPosts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostRsDto'
+
+  /post/user/{userId}:
+    get:
+      tags:
+        - Posts
+      summary: Получить все посты по пользователю
+      operationId: getAllPostsByUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Список постов пользователя
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostRsDto'
+
+  /post/recommendations/{userId}:
+    get:
+      tags:
+        - Posts
+      summary: Получить рекомендации для пользователя
+      operationId: getRecommendations
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: Идентификатор пользователя
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Список рекомендаций
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostRsDto'
+
+  /post:
+    post:
+      tags:
+        - Posts
+      summary: Создать новый пост
+      operationId: addPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRqDto'
+      responses:
+        '201':
+          description: Пост успешно создан
+
+  /post/{id}:
+    put:
+      tags:
+        - Posts
+      summary: Обновить пост
+      operationId: updatePost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Идентификатор поста для обновления
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostUpdateRqDto'
+      responses:
+        '200':
+          description: Обновленный пост
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostRsDto'
+
+components:
+  schemas:
+    PostRsDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      description: Модель поста
+
+    PostRqDto:
+      type: object
+      properties:
+        authorId:
+          type: string
+          format: uuid
+        description:
+          type: string
+      description: DTO для создания нового поста
+
+    PostUpdateRqDto:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+      description: DTO для обновления поста
