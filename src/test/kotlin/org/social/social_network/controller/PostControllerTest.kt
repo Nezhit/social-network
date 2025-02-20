@@ -12,8 +12,8 @@ import org.junit.jupiter.api.TestInstance
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.times
+import org.social.model.PostRqDto
 import org.social.social_network.container.PostgresContainer
-import org.social.social_network.dto.PostRqDto
 import org.social.social_network.entity.Post
 import org.social.social_network.entity.User
 import org.social.social_network.model.CommentNotification
@@ -35,7 +35,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import org.testcontainers.junit.jupiter.Testcontainers
 
-private const val POST_PATH = "/api/post"
+private const val POST_PATH = "/post"
 
 @Testcontainers
 @SpringBootTest
@@ -139,10 +139,9 @@ class PostControllerTest {
         //Given
         val user1 = User().apply { name = "User1" }
         userRepository.save(user1)
-        val postRqDto = PostRqDto(
-            user1.id,
-            "Simple desc"
-        )
+        val postRqDto = PostRqDto()
+        postRqDto.authorId = user1.id
+        postRqDto.description = "Simple desc"
         Mockito.doNothing().`when`(notificationService).sendNotification(any(CommentNotification::class.java))
          //When
          mockMvc.post(POST_PATH) {
