@@ -49,6 +49,7 @@ class PostControllerTest {
 
     @Autowired
     private lateinit var objectMapper: ObjectMapper
+
     @MockBean
     private lateinit var notificationService: NotificationService
 
@@ -68,8 +69,9 @@ class PostControllerTest {
             .alwaysDo<DefaultMockMvcBuilder>(MockMvcResultHandlers.print())
             .build()
     }
+
     @AfterEach
-    fun clean(){
+    fun clean() {
         postRepository.deleteAll()
         userRepository.deleteAll()
 
@@ -134,8 +136,9 @@ class PostControllerTest {
             .first()
             .matches({ it.description == "two" }, "description")
     }
+
     @Test
-    fun addPostTest(){
+    fun addPostTest() {
         //Given
         val user1 = User().apply { name = "User1" }
         userRepository.save(user1)
@@ -143,22 +146,22 @@ class PostControllerTest {
         postRqDto.authorId = user1.id
         postRqDto.description = "Simple desc"
         Mockito.doNothing().`when`(notificationService).sendNotification(any(CommentNotification::class.java))
-         //When
-         mockMvc.post(POST_PATH) {
+        //When
+        mockMvc.post(POST_PATH) {
             characterEncoding = Charsets.UTF_8.name()
-             contentType = MediaType.APPLICATION_JSON
+            contentType = MediaType.APPLICATION_JSON
             accept = MediaType.APPLICATION_JSON
             content = objectMapper.writeValueAsString(postRqDto)
         }.andExpect {
             status { isCreated() }
         }
         //Then
-        Mockito.verify(notificationService,times(1))
+        Mockito.verify(notificationService, times(1))
             .sendNotification(any(CommentNotification::class.java))
-       val post = postRepository.findAll().first()
+        val post = postRepository.findAll().first()
         assertThat(post)
             .isNotNull
             .matches({ it.description == "Simple desc" }, "description")
-            .matches({it.authorId == user1.id},"authorId")
+            .matches({ it.authorId == user1.id }, "authorId")
     }
 }

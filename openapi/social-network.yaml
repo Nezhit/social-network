@@ -1,5 +1,4 @@
-  val generatedSourcesDir = "${layout.buildDirectory.get().asFile.path}/generated/openapi"
-    
+
     openApiGenerate {
     inputSpec.set("$projectDir/openapi/social-network.yaml") // Указываем путь к спецификации
     generatorName.set("spring") // Генератор для Spring

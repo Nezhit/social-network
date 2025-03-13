@@ -54,7 +54,8 @@ public class PostServiceImpl implements PostService {
         newPost.setAuthorId(postRqModel.authorId());
         newPost.setDescription(postRqModel.description());
         Post savedPost = postRepository.save(newPost);
-        notificationService.sendNotification(new CommentNotification(postRqModel.authorId(),savedPost.getAuthorId(), Instant.now()));
+        CommentNotification commentNotification = new CommentNotification(postRqModel.authorId(), savedPost.getAuthorId(), Instant.now());
+        notificationService.sendNotification(commentNotification);
     }
 
     @Override

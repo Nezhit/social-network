@@ -31,6 +31,7 @@ public class PostController implements PostsApi {
     public ResponseEntity<Void> addPost(PostRqDto postRqDto) {
         PostRqModel model = postMapper.postRqDtoToPostModel(postRqDto);
         postService.addPost(model);
+        log.info("Выполнен запрос addPost");
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -39,7 +40,7 @@ public class PostController implements PostsApi {
         List<PostRsDto> responseList = postService.findAll().stream()
                 .map(postMapper::postToPostRsDto)
                 .toList();
-        log.info("Выполнен запрос getAllPosts вернул {}",responseList);
+        log.info("Выполнен запрос getAllPosts вернул {}", responseList);
         return ResponseEntity.ok(responseList);
     }
 
@@ -48,7 +49,7 @@ public class PostController implements PostsApi {
         List<PostRsDto> responseList = postService.findAll(userId).stream()
                 .map(postMapper::postToPostRsDto)
                 .toList();
-        log.info("Выполнен запрос getAllPostsByUser вернул {}",responseList);
+        log.info("Выполнен запрос getAllPostsByUser вернул {}", responseList);
         return ResponseEntity.ok(responseList);
     }
 
@@ -56,16 +57,16 @@ public class PostController implements PostsApi {
     public ResponseEntity<List<PostRsDto>> getRecommendations(UUID userId) {
         List<PostRsDto> responseList = postService.findRecommendations(userId).stream()
                 .map(postMapper::postToPostRsDto)
-                .toList();;
+                .toList();
+        log.info("Выполнен запрос getRecommendations вернул {}", responseList);
         return ResponseEntity.ok(responseList);
     }
 
     @Override
     public ResponseEntity<PostRsDto> updatePost(UUID id, PostUpdateRqDto postUpdateRqDto) {
-        PostRsDto response = postMapper.postToPostRsDto(postService.updatePost(
-                id,
-                postMapper.postUpdateRqDtoToPostUpdateModel(postUpdateRqDto)
-        ));
+        Post post = postService.updatePost(id, postMapper.postUpdateRqDtoToPostUpdateModel(postUpdateRqDto));
+        PostRsDto response = postMapper.postToPostRsDto(post);
+        log.info("Выполнен запрос updatePost вернул {}", response);
         return ResponseEntity.ok(response);
     }
 }

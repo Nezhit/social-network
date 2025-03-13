@@ -14,6 +14,8 @@ public interface PostMapper {
     PostRqModel postRqDtoToPostModel(PostRqDto dto);
 
     PostUpdateRqModel postUpdateRqDtoToPostUpdateModel(PostUpdateRqDto dto);
+
     PostRsDto postToPostRsDto(Post post);
+
     PostUpdateRqModel postUpdateRqModelToPostUpdateRqDto(PostUpdateRqDto postUpdateRqDto);
 }
