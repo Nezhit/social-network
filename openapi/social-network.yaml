@@ -1,0 +1,27 @@
+
+    openApiGenerate {
+    inputSpec.set("$projectDir/openapi/social-network.yaml") // Указываем путь к спецификации
+    generatorName.set("spring") // Генератор для Spring
+    library.set("spring-boot") // Используем Spring Boot
+    additionalProperties.put("useSpringBoot3", true) // Для Spring Boot 3
+    outputDir.set(generatedSourcesDir) // Папка для сгенерированных исходников
+    configOptions.put("openApiNullable", "false") // Отключаем nullable
+    configOptions.put("interfaceOnly", "true") // Генерировать только интерфейсы, без реализаций
+    configOptions.put("useTags", "true") // Используем теги
+    typeMappings.put("OffsetDateTime", "java.time.Instant") // Тип для работы с датой и временем
+    apiPackage.set("$group.api") // Пакет для API
+    modelPackage.set("$group.model") // Пакет для моделей данных
+    groupId.set("$group") // Группа проекта
+  }
+    
+    sourceSets {
+    getByName("main") {
+    java {
+    srcDir("$generatedSourcesDir/src/main/java") // Указываем директорию сгенерированных исходников
+    }
+    }
+  }
+    
+    tasks.compileJava {
+    dependsOn(tasks.openApiGenerate) // Заставляем компиляцию зависеть от генерации OpenAPI
+  }

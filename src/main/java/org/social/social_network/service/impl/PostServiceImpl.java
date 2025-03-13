@@ -12,6 +12,7 @@ import org.social.social_network.service.PostService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,7 +53,9 @@ public class PostServiceImpl implements PostService {
         Post newPost = new Post();
         newPost.setAuthorId(postRqModel.authorId());
         newPost.setDescription(postRqModel.description());
-        postRepository.save(newPost);
+        Post savedPost = postRepository.save(newPost);
+        CommentNotification commentNotification = new CommentNotification(postRqModel.authorId(), savedPost.getAuthorId(), Instant.now());
+        notificationService.sendNotification(commentNotification);
     }
 
     @Override

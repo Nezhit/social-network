@@ -124,11 +124,11 @@ components:
         id:
           type: string
           format: uuid
-        title:
+        description:
           type: string
-        content:
-          type: string
-        createdAt:
+        likes:
+          type: integer
+        pubDate:
           type: string
           format: date-time
       description: Модель поста
